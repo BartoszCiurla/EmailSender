@@ -1,35 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using CsvHelper;
-using CsvHelper.Configuration;
 
 namespace Service
 {
     public interface IReadCsvService<out T>
     {
-        IEnumerable<T> ReadCsv();
+        IEnumerable<T> ReadCsv(int currentRow);
     }
     public class ReadCsvService<T> : IReadCsvService<T>, IDisposable
     {
         private readonly ICsvReader _csvReader;
+        private readonly int _recordsToTake;
 
-        public ReadCsvService(ICsvReader csvReader)
+        public ReadCsvService(ICsvReader csvReader, int recordsToTake)
         {
             _csvReader = csvReader;
+            _recordsToTake = recordsToTake;
         }
 
-        public static int RecordCountToTake = 100;
-        public IEnumerable<T> ReadCsv()
+        public IEnumerable<T> ReadCsv(int currentRow)
         {
-            int counter = 0;
-            while (_csvReader.Read())
-            {
-                if (counter == RecordCountToTake)
-                    break;
-                counter++;
-                yield return (_csvReader.GetRecord<T>());
-            }
+            return _csvReader.GetRecords<T>().Skip(currentRow).Take(_recordsToTake).AsEnumerable();
         }
 
         public void Dispose()

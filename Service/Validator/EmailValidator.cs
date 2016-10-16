@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using Model;
 
 namespace Service.Validator
 {
-    public class EmailValidator
+    public class EmailValidator: AbstractValidator<EmailAddress>
     {
         public EmailValidator()
         {
-            //todo pamietam ze byla jakas opcja zeby to dzialalo z automatu tzn sam sobie wykrywa ze jest dziedziczenie i odpala wlasciwy walidator
+            RuleFor(ea => ea.Email).NotEmpty();
+
+            RuleFor(ea => ea.Email).NotNull();
+
+            RuleFor(ea => ea.Email).EmailAddress();
         }
     }
 }

@@ -7,8 +7,8 @@ namespace Service.Validator
     {
         public PersonValidator()
         {
-            RuleFor(x => x.FirstName).NotEmpty();
-            RuleFor(x => x.LastName).NotEmpty();
+            RuleFor(p => p.FirstName).NotEmpty();
+            RuleFor(p => p.LastName).NotEmpty();
         }
     }
 }
